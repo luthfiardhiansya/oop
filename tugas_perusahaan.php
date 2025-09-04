@@ -19,8 +19,19 @@
         <label for="">gaji pokok</label>
         <input type="number" name="gaji">
         <br>
+        <label for="">status personal karyawan</label>
+        <select name="status_personal" id="">
+        <option value="menikah">menikah</option>
+        </select>
+        <label for="">status karyawan</label>
+        <select name="status_karyawan" id="">
+        <option value="manager">manager</option>
+        <option value="supervisor">supervisor</option>
+        <option value="staff">staff</option>
+        </select>
+        <br>
         <label for="">status kepegawaian</label>
-        <select name="status" id="">
+        <select name="status_kepegawaian" id="">
         <option value="tetap">tetap</option>
         <option value="kontrak">kontrak</option>
         </select>
@@ -29,27 +40,54 @@
         </form>
     </fieldset>
     <?php
-class pegawai() {
-    public
-    $nama,$id,$gaji,$status;
+class Pegawai {
+    public $nama, $id, $gaji, $status_karyawan, $status_kepegawaian;
     
-    public function __construct($nama,$id,$gaji,$status)
-    {
-        $this->nama =$nama;
-        $this->id =$id;
-        $this->gaji =$gaji;
-        $this->status =$status;
+    public function __construct($nama, $id, $gaji, $status_karyawan, $status_kepegawaian) {
+        $this->nama = $nama;
+        $this->id = $id;
+        $this->gaji = $gaji;
+        $this->status_karyawan = $status_karyawan;
+        $this->status_kepegawaian = $status_kepegawaian;
     }
 
+    public function tunjanganA() {
+        if ($this->status_karyawan == 'manager') {
+            return 0.20 * $this->gaji;
+        } elseif ($this->status_karyawan == 'supervisor') {
+            return 0.15 * $this->gaji;
+        } elseif ($this->status_karyawan == 'staff') {
+            return 0.10 * $this->gaji;
+        }
+    }
+    public function tunjanganB() {
+        if ($this->status_kepegawaian == 'tetap') {
+            return 500000 + $this->gaji;
+        } else {
+            return 0;
+        }
+    }
+    public function totalTunjangan() {
+        return $this->tunjanganA() + $this->tunjanganB();
+    }
 }
         if ($_SERVER['REQUEST_METHOD'] ==  'POST') {
-            $a = $_POST['nama'];
-            $i = $_POST['id'];
-            $g = $_POST['gaji'];
-            $s = $_POST['status'];
+            $nama = $_POST['nama'];
+            $id = $_POST['id'];
+            $gaji = $_POST['gaji'];
+            $status_karyawan = $_POST['status_karyawan'];
+            $status_kepegawaian = $_POST['status_kepegawaian'];
 
-            $pegawai = new pegawai($a,$i,$g,$s);
-            echo "nama " . $this->a . ;
+            $pegawai = new pegawai($nama,$id,$gaji,$status_karyawan,$status_kepegawaian);
+            echo "nama: " . $pegawai->nama . "<br>";
+            echo "ID: " . $pegawai->id . "<br>";
+            echo "gaji: " . $pegawai->gaji . "<br>";
+            echo "status karyawan: " . $pegawai->status_karyawan . "<br>";
+            echo "status kepegawaian: " . $pegawai->status_kepegawaian . "<br>";
+            echo "tunjangan jabatan: " . $pegawai->tunjanganA() . "<br>";
+            echo "tunjangan transportasi: " . $pegawai->tunjanganB() . "<br>";
+            echo "total tunjangan: " . $pegawai->totaltunjangan() . "<br>";
+
         }
 ?>
 </body>
